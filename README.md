@@ -1,16 +1,57 @@
-# React + Vite
+# macOS Portfolio
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A stunning macOS-themed portfolio website built with React, Vite, and Tailwind CSS. Features an interactive desktop experience with draggable windows, a functional dock, and smooth animations.
 
-Currently, two official plugins are available:
+## Features
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Babel](https://babeljs.io/) (or [oxc](https://oxc.rs) when used in [rolldown-vite](https://vite.dev/guide/rolldown)) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+- 🖥️ **macOS Interface** - Authentic macOS Big Sur design
+- 📱 **Responsive** - Optimized for desktop viewing
+- 🪟 **Window Management** - Open, close, and focus multiple windows
+- 🎨 **Beautiful UI** - Smooth animations and transitions
+- ⚡ **Fast** - Built with Vite for lightning-fast performance
 
-## React Compiler
+## Windows/Apps
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+- **Finder** - Browse projects and work samples
+- **Safari** - View blog posts and articles
+- **Terminal** - Display tech stack and skills
+- **Photos** - Image gallery
+- **Contact** - Social media links
+- **Resume** - PDF resume viewer
 
-## Expanding the ESLint configuration
+## Tech Stack
 
-If you are developing a production application, we recommend using TypeScript with type-aware lint rules enabled. Check out the [TS template](https://github.com/vitejs/vite/tree/main/packages/create-vite/template-react-ts) for information on how to integrate TypeScript and [`typescript-eslint`](https://typescript-eslint.io) in your project.
+- React 19
+- Vite 7
+- Tailwind CSS 4
+- Day.js
+
+## Getting Started
+
+1. Install dependencies:
+```bash
+npm install
+```
+
+2. Start dev server:
+```bash
+npm run dev
+```
+
+3. Build for production:
+```bash
+npm run build
+```
+
+## Note
+
+This project requires Node.js 20.19+ or 22.12+ due to Vite 7 requirements.
+
+## Customization
+
+Edit `src/constants/index.js` to customize:
+- Your projects and portfolio items
+- Social media links
+- Tech stack
+- Blog posts
+- Gallery images

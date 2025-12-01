@@ -12,6 +12,7 @@ export default defineConfig({
     alias: {
       '#components': resolve(dirname(fileURLToPath(import.meta.url)), 'src/components'),
       '#constants': resolve(dirname(fileURLToPath(import.meta.url)), 'src/constants'),
+      '#context': resolve(dirname(fileURLToPath(import.meta.url)), 'src/context'),
       '#store': resolve(dirname(fileURLToPath(import.meta.url)), 'src/store'),
       '#hoc': resolve(dirname(fileURLToPath(import.meta.url)), 'src/hoc'),
       '#hwindows': resolve(dirname(fileURLToPath(import.meta.url)), 'src/hwindows'),

@@ -6,7 +6,10 @@ const TextPressure = ({
     className = "",
     minWeight = 100,
     maxWeight = 900,
-    range = 100
+    range = 100,
+    textColor = "#000000",
+    strokeColor = "#ff0000",
+    stroke = false
 }) => {
     const containerRef = useRef(null)
     const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
@@ -53,13 +56,16 @@ const TextPressure = ({
                     minWeight={minWeight}
                     maxWeight={maxWeight}
                     range={range}
+                    textColor={textColor}
+                    strokeColor={strokeColor}
+                    stroke={stroke}
                 />
             ))}
         </div>
     )
 }
 
-const Char = ({ char, mousePos, containerRect, index, total, minWeight, maxWeight, range }) => {
+const Char = ({ char, mousePos, containerRect, index, total, minWeight, maxWeight, range, textColor, strokeColor, stroke }) => {
     const charRef = useRef(null)
     const [weight, setWeight] = useState(minWeight)
 
@@ -95,7 +101,9 @@ const Char = ({ char, mousePos, containerRect, index, total, minWeight, maxWeigh
                 fontVariationSettings: `'wght' ${weight}`,
                 transition: 'font-weight 0.1s ease-out, font-variation-settings 0.1s ease-out',
                 display: 'inline-block',
-                minWidth: char === ' ' ? '0.5em' : 'auto' // Handle spaces
+                minWidth: char === ' ' ? '0.5em' : 'auto', // Handle spaces
+                color: textColor,
+                WebkitTextStroke: stroke ? `1px ${strokeColor}` : 'none'
             }}
         >
             {char}

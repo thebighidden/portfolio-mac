@@ -8,7 +8,7 @@ const ImgFile = ({ onClose, file }) => {
       <WindowHeader onClose={onClose}>
         <p className="flex-1 text-center">{file.name}</p>
       </WindowHeader>
-      <div className="preview">
+      <div className="preview max-sm:flex-1 max-sm:max-h-none">
         <img src={file.imageUrl} alt={file.name} />
       </div>
     </div>

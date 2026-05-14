@@ -71,7 +71,7 @@ const Navbar = () => {
                         </ul>
                     )}
                 </div>
-                <p className='font-bold hidden sm:block cursor-default'>Soufiane</p>
+                <p className='font-bold text-sm sm:text-base cursor-default truncate'>Soufiane</p>
                 <ul className="flex items-center gap-1">
                     {navLinks.map((link) => (
                         <li key={link.id} className="relative">
@@ -114,14 +114,15 @@ const Navbar = () => {
                 </ul>
             </div>
             <div className="nav-right">
-                <ul className="flex items-center gap-2">
+                <ul className="flex items-center gap-2 max-sm:hidden">
                     {navIcons.map(({ id, img }) => (
                         <li key={id}>
                             <img src={img} className="icon" alt="nav icon" />
                         </li>
                     ))}
                 </ul>
-                <time>{time.format("ddd MMM D h:mm A")}</time>
+                <time className="hidden sm:inline">{time.format("ddd MMM D h:mm A")}</time>
+                <time className="sm:hidden">{time.format("h:mm A")}</time>
             </div>
         </nav>
     )

@@ -68,7 +68,7 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
     }
   }
 
-  const onMouseMove = useCallback((e) => {
+  const onPointerMove = useCallback((e) => {
     const ds = dragState.current
     if (!ds) return
     const rect = contentRef.current?.getBoundingClientRect()
@@ -79,8 +79,9 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
     const dy = e.clientY - ds.startY
     if (!ds.moved && Math.hypot(dx, dy) > DRAG_THRESHOLD) ds.moved = true
     if (ds.moved) {
-      const maxX = rect.width - 96
-      const maxY = rect.height - 96
+      const iconW = window.innerWidth < 640 ? 64 : 96
+      const maxX = rect.width - iconW
+      const maxY = rect.height - iconW
       setPositions((p) => ({
         ...p,
         [ds.key]: {
@@ -91,15 +92,16 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
     }
   }, [])
 
-  const onMouseUp = useCallback(() => {
+  const onPointerUp = useCallback(() => {
     const ds = dragState.current
     if (!ds) return
     const wasDrag = ds.moved
     dragState.current = null
-    document.removeEventListener('mousemove', onMouseMove)
-    document.removeEventListener('mouseup', onMouseUp)
+    document.removeEventListener('pointermove', onPointerMove)
+    document.removeEventListener('pointerup', onPointerUp)
+    document.removeEventListener('pointercancel', onPointerUp)
     if (!wasDrag) ds.openItem()
-  }, [onMouseMove])
+  }, [onPointerMove])
 
   const startDrag = (e, item) => {
     e.preventDefault()
@@ -114,8 +116,9 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
       offsetY: e.clientY - itemRect.top,
       moved: false,
     }
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('pointermove', onPointerMove)
+    document.addEventListener('pointerup', onPointerUp)
+    document.addEventListener('pointercancel', onPointerUp)
   }
 
   return (
@@ -135,7 +138,7 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
         </div>
       </WindowHeader>
 
-      <div className="flex h-96">
+      <div className="flex h-96 max-sm:h-auto max-sm:flex-1 max-sm:min-h-0">
         <div className="sidebar">
           <h3>Favorites</h3>
           <ul>
@@ -195,8 +198,8 @@ const Finder = ({ onClose, initialLocation = 'projects' }) => {
                 <li
                   key={item.id}
                   className={!savedPos ? (item.position || 'top-5 left-5') : ''}
-                  style={style}
-                  onMouseDown={(e) => startDrag(e, item)}
+                  style={{ ...style, touchAction: 'none' }}
+                  onPointerDown={(e) => startDrag(e, item)}
                 >
                   <img src={item.icon} alt={item.name} draggable={false} />
                   <p>{item.name}</p>

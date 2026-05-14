@@ -6,6 +6,13 @@ const STORAGE_KEY = 'desktop-icon-positions-v1'
 const DRAG_THRESHOLD = 4
 
 const defaultPositions = () => {
+  const isMobile = window.innerWidth < 640
+  if (isMobile) {
+    return {
+      projects: { x: 16, y: 56 },
+      resume:   { x: 16, y: 170 },
+    }
+  }
   const right = Math.max(window.innerWidth - 130, 100)
   return {
     projects: { x: right, y: 40 },
@@ -51,7 +58,7 @@ const Desktop = () => {
     } catch {}
   }, [positions])
 
-  const onMouseMove = useCallback((e) => {
+  const onPointerMove = useCallback((e) => {
     const ds = dragState.current
     if (!ds) return
     const x = e.clientX - ds.offsetX
@@ -60,25 +67,27 @@ const Desktop = () => {
     const dy = e.clientY - ds.startY
     if (!ds.moved && Math.hypot(dx, dy) > DRAG_THRESHOLD) ds.moved = true
     if (ds.moved) {
+      const iconW = window.innerWidth < 640 ? 80 : 96
       setPositions((p) => ({
         ...p,
         [ds.id]: {
-          x: Math.max(0, Math.min(window.innerWidth - 96, x)),
-          y: Math.max(28, Math.min(window.innerHeight - 96, y)),
+          x: Math.max(0, Math.min(window.innerWidth - iconW, x)),
+          y: Math.max(28, Math.min(window.innerHeight - iconW, y)),
         },
       }))
     }
   }, [])
 
-  const onMouseUp = useCallback((e) => {
+  const onPointerUp = useCallback(() => {
     const ds = dragState.current
     if (!ds) return
     const wasDrag = ds.moved
     dragState.current = null
-    document.removeEventListener('mousemove', onMouseMove)
-    document.removeEventListener('mouseup', onMouseUp)
+    document.removeEventListener('pointermove', onPointerMove)
+    document.removeEventListener('pointerup', onPointerUp)
+    document.removeEventListener('pointercancel', onPointerUp)
     if (!wasDrag) ds.onOpen()
-  }, [onMouseMove])
+  }, [onPointerMove])
 
   const startDrag = (e, item) => {
     e.preventDefault()
@@ -93,18 +102,19 @@ const Desktop = () => {
       offsetY: e.clientY - rect.top,
       moved: false,
     }
-    document.addEventListener('mousemove', onMouseMove)
-    document.addEventListener('mouseup', onMouseUp)
+    document.addEventListener('pointermove', onPointerMove)
+    document.addEventListener('pointerup', onPointerUp)
+    document.addEventListener('pointercancel', onPointerUp)
   }
 
   return (
     <div id="home" className="relative h-full w-full">
-      <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-0 pointer-events-none">
-        <div className="pointer-events-auto mb-4">
+      <div className="absolute inset-0 flex flex-col items-center justify-center text-white z-0 pointer-events-none px-4">
+        <div className="pointer-events-auto mb-3 sm:mb-4 w-full max-w-3xl">
           <TextPressure
             text="Soufiane Bighidene"
             flex={true}
-            className="text-7xl tracking-tighter drop-shadow-2xl cursor-default"
+            className="text-4xl sm:text-6xl md:text-7xl tracking-tighter drop-shadow-2xl cursor-default"
             alpha={false}
             stroke={false}
             width={true}
@@ -112,10 +122,10 @@ const Desktop = () => {
             italic={true}
             textColor="#ffffff"
             strokeColor="#ff0000"
-            minFontSize={36}
+            minFontSize={28}
           />
         </div>
-        <p className="text-2xl font-light tracking-widest uppercase opacity-90 drop-shadow-lg">
+        <p className="text-sm sm:text-xl md:text-2xl font-light tracking-widest uppercase opacity-90 drop-shadow-lg text-center">
           Full Stack Engineer
         </p>
       </div>
@@ -127,8 +137,8 @@ const Desktop = () => {
             <li
               key={item.id}
               className="desktop-icon"
-              style={{ left: pos.x, top: pos.y }}
-              onMouseDown={(e) => startDrag(e, item)}
+              style={{ left: pos.x, top: pos.y, touchAction: 'none' }}
+              onPointerDown={(e) => startDrag(e, item)}
             >
               <img src={item.icon} alt={item.label} draggable={false} />
               <p>{item.label}</p>

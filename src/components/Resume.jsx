@@ -21,7 +21,7 @@ const Resume = ({ onClose }) => {
   return (
     <div id="resume">
       <WindowHeader title="Resume.pdf" onClose={onClose} />
-      <div className="p-5 bg-gray-100 flex flex-col items-center gap-4">
+      <div className="p-3 sm:p-5 bg-gray-100 flex flex-col items-center gap-3 sm:gap-4 max-sm:flex-1 max-sm:min-h-0 max-sm:overflow-y-auto">
         <div className="lang-toggle">
           {Object.entries(versions).map(([key, v]) => (
             <button
@@ -37,7 +37,7 @@ const Resume = ({ onClose }) => {
         <iframe
           key={current.file}
           src={current.file}
-          className="w-full h-[60vh] bg-white border border-gray-200 rounded-sm"
+          className="w-full sm:w-[40rem] h-[60vh] sm:h-[60vh] max-sm:flex-1 max-sm:min-h-[20rem] bg-white border border-gray-200 rounded-sm"
           title={`Resume ${current.label}`}
         />
         <a

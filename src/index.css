@@ -12,6 +12,14 @@ body {
   background-repeat: no-repeat;
   background-position: center;
   font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, "Inter", sans-serif;
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: transparent;
+}
+
+input,
+textarea,
+select {
+  font-size: 16px;
 }
 
 @theme {
@@ -38,15 +46,16 @@ body {
   }
 
   nav {
-    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-1 px-4 select-none w-full fixed top-0 z-50 transition-all duration-500 ease-out;
+    @apply flex justify-between items-center bg-white/50 backdrop-blur-3xl p-1 px-2 sm:px-4 select-none w-full fixed top-0 z-50 transition-all duration-500 ease-out;
     box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+    padding-top: max(0.25rem, env(safe-area-inset-top));
 
     .nav-left {
-      @apply flex items-center gap-4;
+      @apply flex items-center gap-2 sm:gap-4 min-w-0;
     }
 
     .nav-right {
-      @apply flex items-center gap-4;
+      @apply flex items-center gap-2 sm:gap-4;
     }
 
     ul {
@@ -74,7 +83,7 @@ body {
     }
 
     time {
-      @apply text-sm font-medium text-black min-w-[140px] text-right;
+      @apply text-xs sm:text-sm font-medium text-black min-w-0 sm:min-w-[140px] text-right;
     }
   }
 }
@@ -84,33 +93,59 @@ body {
     @apply p-1 hover:bg-gray-200 rounded hover:cursor-default;
   }
 
-  #welcome {
-    @apply text-gray-200 flex flex-col justify-center items-center absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 select-none max-sm:h-screen max-sm:w-full max-sm:px-10;
+  /* ===== Desktop wallpaper hero ===== */
+  #home {
+    @apply relative z-0 w-full h-full;
 
-    .small-screen {
-      @apply sm:hidden m-7 bg-red-300/20 backdrop-blur-lg p-3 rounded-md absolute top-10;
+    .desktop-icons {
+      @apply absolute inset-0 pointer-events-none;
+    }
+
+    .desktop-icon {
+      @apply absolute z-10 select-none flex items-center flex-col gap-1 w-20 sm:w-24 cursor-grab active:cursor-grabbing pointer-events-auto p-2 rounded-lg;
+
+      img {
+        @apply size-12 sm:size-14 object-contain p-1 rounded-md transition-colors;
+        -webkit-user-drag: none;
+      }
 
       p {
-        @apply flex-1 text-[16px] text-center font-roboto text-gray-400;
+        @apply text-[12px] sm:text-[13px] font-medium text-white text-center px-2 py-0.5 rounded-md transition-colors drop-shadow-md leading-tight;
+      }
+
+      span {
+        @apply text-[10px] text-white/80 text-center drop-shadow-md leading-tight;
+      }
+
+      &:hover img {
+        @apply bg-white/10;
+      }
+
+      &:hover p {
+        @apply bg-blue-500/80;
       }
     }
   }
 
+  /* ===== Dock ===== */
   #dock {
-    @apply absolute bottom-5 left-1/2 -translate-x-1/2 z-50 select-none max-sm:hidden;
+    @apply fixed bottom-2 sm:bottom-5 left-1/2 -translate-x-1/2 z-50 select-none;
+    padding-bottom: max(0px, env(safe-area-inset-bottom));
 
     .dock-container {
-      @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1.5 flex items-end gap-1.5;
-      padding-top: 0.75rem;
-      padding-bottom: 0.5rem;
+      @apply bg-white/20 backdrop-blur-md justify-between rounded-2xl p-1 sm:p-1.5 flex items-end gap-1 sm:gap-1.5 max-w-[96vw] overflow-x-auto;
+      padding-top: 0.5rem;
+      padding-bottom: 0.375rem;
+      scrollbar-width: none;
     }
+    .dock-container::-webkit-scrollbar { display: none; }
 
     .tooltip {
-      @apply py-1 px-3 w-fit text-center text-xs rounded-md bg-gray-800/90 text-white shadow-2xl;
+      @apply py-1 px-3 w-fit text-center text-xs rounded-md bg-gray-800/90 text-white shadow-2xl max-sm:hidden;
     }
 
     .dock-icon {
-      @apply size-14 3xl:size-20 cursor-pointer;
+      @apply size-10 sm:size-14 3xl:size-20 cursor-pointer flex-none;
       transform-origin: bottom center;
       will-change: transform;
 
@@ -145,98 +180,118 @@ body {
     }
   }
 
+  /* ===== Window controls / header ===== */
   #window-controls {
-    @apply flex gap-2;
+    @apply flex gap-1.5 sm:gap-2;
 
     .close {
-      @apply size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
+      @apply size-3 sm:size-3.5 rounded-full bg-[#ff6157] cursor-pointer;
     }
 
     .minimize {
-      @apply size-3.5 rounded-full bg-[#ffc030];
+      @apply size-3 sm:size-3.5 rounded-full bg-[#ffc030];
     }
 
     .maximize {
-      @apply size-3.5 rounded-full bg-[#2acb42];
+      @apply size-3 sm:size-3.5 rounded-full bg-[#2acb42];
     }
   }
 
   #window-header {
-    @apply flex items-center justify-between px-4 py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-sm text-gray-400;
+    @apply flex items-center justify-between px-3 sm:px-4 py-2 sm:py-3 rounded-t-lg bg-gray-50 border-b border-gray-200 select-none text-xs sm:text-sm text-gray-400;
   }
 
+  /* ===== Shared mobile window override =====
+     On <sm, every window becomes a fullscreen-ish sheet
+     between the navbar and the dock. */
+  #safari,
+  #terminal,
+  #contact,
+  #photos,
+  #resume,
+  #finder,
+  #txtfile,
+  #imgfile,
+  #maps {
+    @apply max-sm:fixed max-sm:inset-x-2 max-sm:top-12 max-sm:bottom-20 max-sm:left-2 max-sm:right-2 max-sm:w-auto max-sm:h-auto max-sm:max-w-none max-sm:transform-none max-sm:flex max-sm:flex-col;
+  }
+
+  /* ===== Safari ===== */
   #safari {
-    @apply w-4xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-4xl max-w-[94vw] absolute top-40 left-1/2 -translate-x-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     .search {
-      @apply flex items-center gap-3 w-2/3 bg-white border border-gray-300 rounded-lg px-3 py-2;
+      @apply flex items-center gap-2 sm:gap-3 w-full sm:w-2/3 bg-white border border-gray-300 rounded-lg px-2 sm:px-3 py-1.5 sm:py-2;
 
       input {
-        @apply placeholder:text-gray-400;
+        @apply placeholder:text-gray-400 text-xs sm:text-sm w-full min-w-0;
       }
     }
 
     .blog {
-      @apply bg-white p-10 max-w-3xl mx-auto;
+      @apply bg-white p-5 sm:p-10 max-w-3xl mx-auto;
 
       h2 {
-        @apply text-xl font-bold text-pink-600 mb-10;
+        @apply text-lg sm:text-xl font-bold text-pink-600 mb-6 sm:mb-10;
       }
 
       .blog-post {
-        @apply grid grid-cols-12 space-x-5;
+        @apply grid grid-cols-12 gap-3 sm:gap-5 items-start;
 
         img {
-          @apply size-full rounded-md object-cover;
+          @apply size-full rounded-md object-cover col-span-3 sm:col-span-2;
         }
 
         .content {
-          @apply col-span-10 space-y-3;
+          @apply col-span-9 sm:col-span-10 space-y-2 sm:space-y-3 min-w-0;
 
           p {
-            @apply text-xs text-gray-500;
+            @apply text-[11px] sm:text-xs text-gray-500;
           }
 
           h3 {
-            @apply font-semibold text-base text-gray-800;
+            @apply font-semibold text-sm sm:text-base text-gray-800;
           }
 
           a {
-            @apply text-blue-600 text-xs hover:underline flex items-center gap-3;
+            @apply text-blue-600 text-xs hover:underline flex items-center gap-2 sm:gap-3;
           }
         }
       }
     }
   }
 
+  /* ===== Terminal ===== */
   #terminal {
-    @apply w-xl absolute top-32 left-1/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl max-w-[94vw] absolute top-32 left-1/2 -translate-x-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
 
     .techstack {
-      @apply text-sm font-roboto p-5;
+      @apply text-xs sm:text-sm font-roboto p-3 sm:p-5 overflow-y-auto;
 
       .label {
-        @apply flex items-center ms-10 mt-7;
+        @apply flex items-center ms-4 sm:ms-10 mt-4 sm:mt-7;
       }
 
       .content {
-        @apply py-5 my-5 border-y border-dashed space-y-1;
+        @apply py-3 sm:py-5 my-3 sm:my-5 border-y border-dashed space-y-1;
 
         li {
+          @apply flex flex-wrap items-start;
+
           .check {
-            @apply text-[#00A154] w-5;
+            @apply text-[#00A154] w-4 sm:w-5 flex-none;
           }
 
           h3 {
-            @apply font-semibold text-[#00A154] w-32 ms-5;
+            @apply font-semibold text-[#00A154] w-24 sm:w-32 ms-2 sm:ms-5 flex-none;
           }
 
           ul {
-            @apply flex items-center gap-3;
+            @apply flex flex-wrap items-center gap-2 sm:gap-3 ms-2 sm:ms-0;
           }
         }
       }
@@ -248,81 +303,87 @@ body {
           @apply flex items-center;
 
           svg {
-            @apply w-5 me-5;
+            @apply w-4 sm:w-5 me-3 sm:me-5 flex-none;
           }
         }
       }
     }
   }
 
+  /* ===== Contact ===== */
   #contact {
-    @apply max-w-2xl absolute top-60 left-5/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply max-w-2xl absolute top-32 sm:top-60 left-1/2 sm:left-5/12 -translate-x-1/2 sm:translate-x-0 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
 
     h3 {
-      @apply text-xl font-semibold;
+      @apply text-lg sm:text-xl font-semibold;
     }
 
     ul {
-      @apply flex items-center gap-3;
+      @apply grid grid-cols-2 gap-2 sm:gap-3;
 
       li {
-        @apply rounded-lg p-3 w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
+        @apply rounded-lg p-3 w-full sm:w-60 hover:-translate-y-0.5 hover:scale-105 origin-center transition-all duration-300;
 
         a {
-          @apply space-y-5;
+          @apply space-y-3 sm:space-y-5 block;
         }
 
         p {
-          @apply font-semibold text-sm text-white;
+          @apply font-semibold text-xs sm:text-sm text-white;
         }
       }
     }
   }
 
+  /* ===== Photos ===== */
   #photos {
     @apply w-[52rem] max-w-[92vw] absolute top-24 left-1/2 -translate-x-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
+    > .flex {
+      @apply max-sm:flex-col max-sm:h-auto max-sm:flex-1 max-sm:min-h-0;
+    }
+
     .sidebar {
-      @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
+      @apply w-3/12 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-3 sm:p-5 max-sm:w-full max-sm:border-r-0 max-sm:border-b max-sm:max-h-32 max-sm:overflow-y-auto;
 
       h2 {
         @apply text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide;
       }
 
       ul {
-        @apply space-y-1;
+        @apply space-y-1 max-sm:flex max-sm:flex-row max-sm:gap-2 max-sm:overflow-x-auto max-sm:space-y-0;
 
         li {
-          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors text-gray-700 hover:bg-gray-200;
+          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors text-gray-700 hover:bg-gray-200 max-sm:flex-none max-sm:px-2 max-sm:py-1.5;
 
           &.active {
             @apply bg-blue-100 text-blue-700 hover:bg-blue-100;
           }
 
           img {
-            @apply w-4;
+            @apply w-4 flex-none;
           }
 
           p {
-            @apply text-sm font-medium leading-tight;
+            @apply text-sm font-medium leading-tight max-sm:text-xs whitespace-nowrap;
           }
 
           span {
-            @apply text-[11px] text-gray-400 leading-tight;
+            @apply text-[11px] text-gray-400 leading-tight max-sm:hidden;
           }
         }
       }
     }
 
     .gallery {
-      @apply p-5 flex-1 overflow-y-auto;
+      @apply p-3 sm:p-5 flex-1 overflow-y-auto min-h-0;
 
       ul {
-        @apply grid grid-cols-3 gap-2.5;
+        @apply grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5;
 
         li {
           @apply relative aspect-square cursor-pointer overflow-hidden rounded-lg bg-gray-100;
@@ -341,7 +402,7 @@ body {
           }
 
           .caption {
-            @apply absolute bottom-0 left-0 right-0 px-2 py-1 text-[11px] text-white bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity;
+            @apply absolute bottom-0 left-0 right-0 px-2 py-1 text-[11px] text-white bg-gradient-to-t from-black/60 to-transparent opacity-0 group-hover:opacity-100 transition-opacity max-sm:opacity-100;
           }
         }
       }
@@ -351,7 +412,7 @@ body {
       @apply fixed inset-0 z-[9999] bg-black/85 flex items-center justify-center;
 
       img {
-        @apply max-w-[85vw] max-h-[85vh] object-contain rounded-md;
+        @apply max-w-[92vw] max-h-[80vh] object-contain rounded-md;
       }
 
       .lb-close,
@@ -361,25 +422,26 @@ body {
       }
 
       .lb-close {
-        @apply top-5 right-5 w-10 h-10 text-2xl;
+        @apply top-4 right-4 sm:top-5 sm:right-5 w-10 h-10 text-2xl;
       }
 
       .lb-prev,
       .lb-next {
-        @apply top-1/2 -translate-y-1/2 w-12 h-12 text-4xl leading-none pb-1;
+        @apply top-1/2 -translate-y-1/2 w-10 h-10 sm:w-12 sm:h-12 text-3xl sm:text-4xl leading-none pb-1;
       }
 
-      .lb-prev { @apply left-5; }
-      .lb-next { @apply right-5; }
+      .lb-prev { @apply left-2 sm:left-5; }
+      .lb-next { @apply right-2 sm:right-5; }
 
       .lb-caption {
-        @apply absolute bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-sm bg-black/40 px-4 py-1.5 rounded-full;
+        @apply absolute bottom-4 sm:bottom-6 left-1/2 -translate-x-1/2 text-white/80 text-xs sm:text-sm bg-black/40 px-3 sm:px-4 py-1 sm:py-1.5 rounded-full max-w-[90vw] text-center;
       }
     }
   }
 
+  /* ===== Resume ===== */
   #resume {
-    @apply w-fit h-fit absolute top-16 left-7/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-fit max-w-[94vw] h-fit absolute top-16 left-1/2 sm:left-7/12 -translate-x-1/2 sm:translate-x-0 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     #window-header {
       h2 {
@@ -404,20 +466,26 @@ body {
     }
   }
 
+  /* ===== Finder ===== */
   #finder {
-    @apply absolute w-3xl left-40 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl;
+    @apply absolute w-3xl max-w-[94vw] left-1/2 sm:left-40 sm:translate-x-0 -translate-x-1/2 top-20 shadow-2xl drop-shadow-2xl overflow-hidden rounded-xl bg-white;
 
     .finder-header {
       @apply flex-1 flex items-center justify-center gap-2;
 
       h2 {
-        @apply font-bold text-sm;
+        @apply font-bold text-xs sm:text-sm truncate;
       }
 
       .back-btn,
       .root-btn {
-        @apply text-gray-500 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed cursor-pointer w-6 h-6 rounded-md hover:bg-gray-100 flex items-center justify-center text-lg leading-none transition-colors;
+        @apply text-gray-500 hover:text-gray-800 disabled:text-gray-300 disabled:cursor-not-allowed cursor-pointer w-6 h-6 rounded-md hover:bg-gray-100 flex items-center justify-center text-lg leading-none transition-colors flex-none;
       }
+    }
+
+    /* Wrap row containing sidebar + content */
+    > .flex {
+      @apply max-sm:flex-col max-sm:h-auto max-sm:flex-1 max-sm:min-h-0;
     }
 
     .content li {
@@ -425,14 +493,14 @@ body {
     }
 
     .sidebar {
-      @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-5 space-y-3;
+      @apply w-48 bg-gray-50 border-r border-gray-200 flex flex-col p-3 sm:p-5 space-y-3 max-sm:w-full max-sm:border-r-0 max-sm:border-b max-sm:max-h-28 max-sm:overflow-y-auto max-sm:p-2 max-sm:space-y-0;
 
       h3 {
-        @apply text-xs font-medium text-gray-400 mb-1;
+        @apply text-xs font-medium text-gray-400 mb-1 max-sm:hidden;
       }
 
       ul {
-        @apply space-y-1;
+        @apply space-y-1 max-sm:flex max-sm:flex-row max-sm:gap-1.5 max-sm:overflow-x-auto max-sm:space-y-0;
 
         .active {
           @apply bg-blue-100 text-blue-700;
@@ -443,36 +511,36 @@ body {
         }
 
         li {
-          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors;
+          @apply flex items-center gap-2 px-3 py-2 rounded-md cursor-pointer transition-colors max-sm:flex-none max-sm:px-2 max-sm:py-1.5 max-sm:whitespace-nowrap;
         }
       }
     }
 
     .content {
-      @apply flex-1 p-8 bg-white max-w-2xl relative;
+      @apply flex-1 p-4 sm:p-8 bg-white max-w-2xl relative min-h-[20rem] max-sm:max-w-none max-sm:min-h-[18rem] overflow-y-auto;
 
       li {
-        @apply absolute flex items-center flex-col gap-3;
+        @apply absolute flex items-center flex-col gap-2 sm:gap-3;
 
         img {
-          @apply object-contain object-center size-16 relative group-hover:scale-105;
+          @apply object-contain object-center size-12 sm:size-16 relative group-hover:scale-105;
         }
 
         p {
-          @apply text-sm text-center font-medium w-40;
+          @apply text-xs sm:text-sm text-center font-medium w-28 sm:w-40 leading-tight;
         }
       }
     }
 
     .link-list {
-      @apply flex-1 bg-white p-4 overflow-y-auto flex flex-col gap-2;
+      @apply flex-1 bg-white p-3 sm:p-4 overflow-y-auto flex flex-col gap-2 min-h-0;
     }
 
     .link-card {
-      @apply flex items-start gap-3 p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50/40 transition-colors no-underline text-gray-800;
+      @apply flex items-start gap-2 sm:gap-3 p-2.5 sm:p-3 rounded-lg border border-gray-200 hover:border-blue-300 hover:bg-blue-50/40 transition-colors no-underline text-gray-800;
 
       img {
-        @apply size-9 object-contain mt-0.5 flex-none;
+        @apply size-8 sm:size-9 object-contain mt-0.5 flex-none;
       }
 
       .link-body {
@@ -513,16 +581,18 @@ body {
     }
   }
 
+  /* ===== Text file viewer ===== */
   #txtfile {
-    @apply w-md absolute top-36 right-32 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-md max-w-[94vw] absolute top-24 sm:top-36 left-1/2 sm:left-auto sm:right-32 -translate-x-1/2 sm:translate-x-0 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     h2 {
       @apply font-bold text-sm text-center w-full;
     }
   }
 
+  /* ===== Image file viewer ===== */
   #imgfile {
-    @apply w-xl absolute top-40 left-2/12 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
+    @apply w-xl max-w-[94vw] absolute top-24 sm:top-40 left-1/2 sm:left-2/12 -translate-x-1/2 sm:translate-x-0 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden;
 
     #window-header {
       p {
@@ -531,7 +601,7 @@ body {
     }
 
     .preview {
-      @apply p-2 bg-gray-200 max-h-[70vh];
+      @apply p-2 bg-gray-200 max-h-[60vh] sm:max-h-[70vh] overflow-y-auto;
 
       img {
         @apply w-full h-fit object-contain object-center;
@@ -539,51 +609,52 @@ body {
     }
   }
 
+  /* ===== Maps ===== */
   #maps {
-    @apply w-[60rem] max-w-[94vw] h-[34rem] absolute top-20 left-1/2 -translate-x-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
+    @apply w-[60rem] max-w-[94vw] h-[34rem] max-h-[80vh] absolute top-20 left-1/2 -translate-x-1/2 bg-white shadow-2xl drop-shadow-2xl rounded-xl overflow-hidden flex flex-col;
 
     .map-body {
-      @apply flex flex-1 min-h-0;
+      @apply flex flex-1 min-h-0 max-sm:flex-col;
     }
 
     .map-sidebar {
-      @apply w-64 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-5;
+      @apply w-64 flex-none bg-gray-50 border-r border-gray-200 flex flex-col p-3 sm:p-5 max-sm:w-full max-sm:border-r-0 max-sm:border-b max-sm:max-h-32 max-sm:overflow-y-auto;
 
       h2 {
-        @apply text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide;
+        @apply text-xs font-medium text-gray-400 mb-2 uppercase tracking-wide max-sm:hidden;
       }
 
       ul {
-        @apply space-y-1 flex-1;
+        @apply space-y-1 flex-1 max-sm:flex max-sm:flex-row max-sm:gap-2 max-sm:overflow-x-auto max-sm:space-y-0 max-sm:flex-none;
 
         li {
-          @apply flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer transition-colors text-gray-700 hover:bg-gray-200;
+          @apply flex items-center gap-3 px-3 py-2 rounded-md cursor-pointer transition-colors text-gray-700 hover:bg-gray-200 max-sm:flex-none max-sm:gap-2 max-sm:px-2 max-sm:py-1.5;
 
           &.active {
             @apply bg-blue-100 text-blue-700 hover:bg-blue-100;
           }
 
           img {
-            @apply w-5 h-5;
+            @apply w-5 h-5 flex-none;
           }
 
           p {
-            @apply text-sm font-medium leading-tight;
+            @apply text-sm font-medium leading-tight max-sm:text-xs whitespace-nowrap;
           }
 
           span {
-            @apply text-[11px] text-gray-400 leading-tight;
+            @apply text-[11px] text-gray-400 leading-tight max-sm:hidden;
           }
         }
       }
 
       .hint {
-        @apply text-[11px] text-gray-400 mt-3 leading-snug;
+        @apply text-[11px] text-gray-400 mt-3 leading-snug max-sm:hidden;
       }
     }
 
     .map-canvas {
-      @apply flex-1 relative;
+      @apply flex-1 relative min-h-[16rem];
 
       .leaflet-root {
         @apply w-full h-full;
@@ -615,39 +686,6 @@ body {
     }
     em {
       @apply text-[11px] text-blue-600 not-italic mt-1;
-    }
-  }
-
-  #home {
-    @apply relative z-0 max-sm:hidden;
-
-    .desktop-icons {
-      @apply absolute inset-0 pointer-events-none;
-    }
-
-    .desktop-icon {
-      @apply absolute z-10 select-none flex items-center flex-col gap-1 w-24 cursor-grab active:cursor-grabbing pointer-events-auto p-2 rounded-lg;
-
-      img {
-        @apply size-14 object-contain p-1 rounded-md transition-colors;
-        -webkit-user-drag: none;
-      }
-
-      p {
-        @apply text-[13px] font-medium text-white text-center px-2 py-0.5 rounded-md transition-colors drop-shadow-md leading-tight;
-      }
-
-      span {
-        @apply text-[10px] text-white/80 text-center drop-shadow-md leading-tight;
-      }
-
-      &:hover img {
-        @apply bg-white/10;
-      }
-
-      &:hover p {
-        @apply bg-blue-500/80;
-      }
     }
   }
 }

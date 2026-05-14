@@ -27,7 +27,7 @@ const Photos = ({ onClose, initialAlbumId }) => {
   return (
     <div id="photos">
       <WindowHeader title={`Gallery — ${activeAlbum.title}`} onClose={onClose} />
-      <div className="flex h-[28rem]">
+      <div className="flex h-[28rem] max-sm:h-auto max-sm:flex-1 max-sm:min-h-0">
         <div className="sidebar">
           <h2>Trips</h2>
           <ul>

@@ -6,7 +6,7 @@ const TxtFile = ({ onClose, file }) => {
   return (
     <div id="txtfile">
       <WindowHeader title={file.name} onClose={onClose} />
-      <div className="p-6 bg-white">
+      <div className="p-4 sm:p-6 bg-white max-sm:flex-1 max-sm:overflow-y-auto">
         {file.subtitle && (
           <h3 className="text-base font-semibold text-gray-900 mb-3">{file.subtitle}</h3>
         )}

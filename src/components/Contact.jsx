@@ -6,7 +6,7 @@ const Contact = ({ onClose }) => {
   return (
     <div id="contact">
       <WindowHeader title="Contact" onClose={onClose} />
-      <div className="p-8 space-y-5">
+      <div className="p-4 sm:p-8 space-y-4 sm:space-y-5 max-sm:flex-1 max-sm:overflow-y-auto">
         <h3>Let's Connect</h3>
         <ul className="grid grid-cols-2 gap-3">
           {socials.map((social) => (

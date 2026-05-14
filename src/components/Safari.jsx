@@ -20,7 +20,7 @@ const Safari = ({ onClose }) => {
           </div>
         </div>
       </WindowHeader>
-      <div className="blog max-h-[70vh] overflow-y-auto">
+      <div className="blog max-h-[70vh] max-sm:max-h-none max-sm:flex-1 max-sm:min-h-0 overflow-y-auto">
         <h2>Latest Articles</h2>
         <div className="space-y-8">
           {blogPosts.map((post) => (

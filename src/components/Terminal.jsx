@@ -6,7 +6,7 @@ const Terminal = ({ onClose }) => {
   return (
     <div id="terminal">
       <WindowHeader title="Skills" onClose={onClose} />
-      <div className="techstack">
+      <div className="techstack max-sm:flex-1 max-sm:min-h-0">
         <div className="label">
           <span className="text-[#00A154]">➜</span>
           <span className="text-blue-500 ms-2">~</span>

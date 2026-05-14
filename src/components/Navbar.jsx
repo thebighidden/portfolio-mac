@@ -88,19 +88,18 @@ const Navbar = () => {
                                     <li
                                         className="dropdown-item font-semibold border-b border-gray-200 mb-1 pb-1"
                                         onClick={() => {
-                                            openWindow('finder')
+                                            openWindow('finder', { location: 'projects' })
                                             setActiveDropdown(null)
                                         }}
                                     >
                                         Open All Projects
                                     </li>
-                                    {locations.work.children.map((project) => (
+                                    {locations.projects.children.map((project) => (
                                         <li
                                             key={project.id}
                                             className="dropdown-item flex items-center gap-2"
                                             onClick={() => {
-                                                // Ideally open specific project, for now open finder
-                                                openWindow('finder')
+                                                openWindow('finder', { location: 'projects' })
                                                 setActiveDropdown(null)
                                             }}
                                         >

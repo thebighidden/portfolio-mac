@@ -6,6 +6,9 @@ import Finder from '#components/Finder'
 import Safari from '#components/Safari'
 import Terminal from '#components/Terminal'
 import Photos from '#components/Photos'
+import Maps from '#components/Maps'
+import TxtFile from '#components/TxtFile'
+import ImgFile from '#components/ImgFile'
 import Contact from '#components/Contact'
 import Resume from '#components/Resume'
 import { WindowProvider, useWindows } from '#context/WindowContext'
@@ -24,7 +27,10 @@ const AppContent = () => {
       
       {windows.finder.isOpen && (
         <div style={{ zIndex: windows.finder.zIndex }} onClick={() => focusWindow('finder')}>
-          <Finder onClose={() => closeWindow('finder')} />
+          <Finder
+            onClose={() => closeWindow('finder')}
+            initialLocation={windows.finder.data?.location ?? 'projects'}
+          />
         </div>
       )}
       
@@ -42,7 +48,13 @@ const AppContent = () => {
       
       {windows.photos.isOpen && (
         <div style={{ zIndex: windows.photos.zIndex }} onClick={() => focusWindow('photos')}>
-          <Photos onClose={() => closeWindow('photos')} />
+          <Photos onClose={() => closeWindow('photos')} initialAlbumId={windows.photos.data?.albumId} />
+        </div>
+      )}
+
+      {windows.maps.isOpen && (
+        <div style={{ zIndex: windows.maps.zIndex }} onClick={() => focusWindow('maps')}>
+          <Maps onClose={() => closeWindow('maps')} />
         </div>
       )}
       
@@ -57,7 +69,19 @@ const AppContent = () => {
           <Resume onClose={() => closeWindow('resume')} />
         </div>
       )}
-      
+
+      {windows.txtfile.isOpen && (
+        <div style={{ zIndex: windows.txtfile.zIndex }} onClick={() => focusWindow('txtfile')}>
+          <TxtFile onClose={() => closeWindow('txtfile')} file={windows.txtfile.data} />
+        </div>
+      )}
+
+      {windows.imgfile.isOpen && (
+        <div style={{ zIndex: windows.imgfile.zIndex }} onClick={() => focusWindow('imgfile')}>
+          <ImgFile onClose={() => closeWindow('imgfile')} file={windows.imgfile.data} />
+        </div>
+      )}
+
       <Dock onAppClick={handleAppClick} />
     </main>
   )
